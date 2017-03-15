@@ -9,8 +9,8 @@ namespace MoviesService.Models
 {
     public interface IMovieCommandHandler
     {
-        int AddNewMovie(MovieData movie);
+        int AddNewMovie(Movie movie);
 
-        void UpdateMovie(int id, MovieData movie);
+        void UpdateMovie(int id, Movie movie);
     }
 }

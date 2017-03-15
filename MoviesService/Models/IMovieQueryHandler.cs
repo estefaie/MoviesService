@@ -5,10 +5,10 @@ namespace MoviesService.Models
 {
     public interface IMovieQueryHandler
     {
-        List<MovieData> GetAllMovies();
+        List<Movie> GetAllMovies();
 
-        List<MovieData> GetAllMoviewSortedBy(SoretedByEnum soretedBy);
+        List<Movie> GetAllMoviewSortedBy(SortedByEnum sortedBy);
 
-        List<MovieData> SearchAll(string searchText);
+        List<Movie> SearchAll(string searchText);
     }
 }

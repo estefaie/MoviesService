@@ -11,7 +11,7 @@ namespace MoviesService.Models
     {
         List<MovieData> GetAllMovies();
 
-        List<MovieData> GetAllMoviewSortedBy(SoretedByEnum soretedBy);
+        List<MovieData> GetAllMoviewSortedBy(SortedByEnum sortedBy);
 
         List<MovieData> SearchAll(string searchText);
     }

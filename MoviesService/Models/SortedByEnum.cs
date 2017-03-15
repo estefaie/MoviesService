@@ -1,6 +1,6 @@
 ﻿namespace MoviesService.Models
 {
-    public enum SoretedByEnum
+    public enum SortedByEnum
     {
         Classification,
         Genre,

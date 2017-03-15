@@ -96,7 +96,9 @@
     <Compile Include="Models\IMovieCommandHandler.cs" />
     <Compile Include="Models\IMovieQueryHandler.cs" />
     <Compile Include="Models\IMovieStore.cs" />
-    <Compile Include="Models\SoretedByEnum.cs" />
+    <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\MovieStore.cs" />
+    <Compile Include="Models\SortedByEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
