@@ -51,6 +51,18 @@
     <Reference Include="MoviesLibrary">
       <HintPath>..\..\MoviesLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleInjector, Version=4.0.0.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.4.0.0-beta2\lib\net45\SimpleInjector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SimpleInjector.Extensions.ExecutionContextScoping, Version=4.0.0.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.Extensions.ExecutionContextScoping.4.0.0-beta2\lib\net45\SimpleInjector.Extensions.ExecutionContextScoping.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SimpleInjector.Integration.WebApi, Version=4.0.0.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.Integration.WebApi.4.0.0-beta2\lib\net45\SimpleInjector.Integration.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -89,16 +101,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Business\CQRS\CommandHandler.cs" />
+    <Compile Include="Business\CQRS\CreateMovieCommand.cs" />
+    <Compile Include="Business\CQRS\ICommand.cs" />
+    <Compile Include="Business\CQRS\ICommandHandler.cs" />
+    <Compile Include="Business\CQRS\UpdateMovieCommand.cs" />
+    <Compile Include="Business\Helpers\ExtensionMethods.cs" />
+    <Compile Include="Business\Repository\IReadRepository.cs" />
+    <Compile Include="Business\Repository\IWriteRepository.cs" />
+    <Compile Include="Business\Repository\ReadRepository.cs" />
+    <Compile Include="Business\Repository\WriteRepository.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\IMovieCommandHandler.cs" />
     <Compile Include="Models\IMovieQueryHandler.cs" />
+    <Compile Include="Models\IMoviesStore.cs" />
     <Compile Include="Models\IMovieStore.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\MovieStore.cs" />
-    <Compile Include="Models\SortedByEnum.cs" />
+    <Compile Include="Business\Enum\SortedByEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

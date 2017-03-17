@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MoviesLibrary;
+using MoviesService.Business.Enum;
 
 namespace MoviesService.Models
 {

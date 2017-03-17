@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MoviesLibrary;
+using MoviesService.Business.Enum;
 
 namespace MoviesService.Models
 {
