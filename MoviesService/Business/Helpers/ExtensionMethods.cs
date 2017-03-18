@@ -31,5 +31,24 @@ namespace MoviesService.Business.Helpers
                 Title = movieData.Title
             };
         }
+
+        /// <summary>
+        /// the extension method for generating a Movie object from a MovieData object
+        /// </summary>
+        /// <param name="movie">original object</param>
+        /// <returns>generated object</returns>
+        public static MovieData ToMovieData(this Movie movie)
+        {
+            return new MovieData
+            {
+                Cast = movie.Cast,
+                Classification = movie.Classification,
+                Genre = movie.Genre,
+                MovieId = movie.MovieId,
+                Rating = movie.Rating,
+                ReleaseDate = movie.ReleaseDate,
+                Title = movie.Title
+            };
+        }
     }
 }

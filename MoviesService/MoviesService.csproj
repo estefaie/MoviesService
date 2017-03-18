@@ -101,11 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Business\CQRS\CommandHandler.cs" />
-    <Compile Include="Business\CQRS\CreateMovieCommand.cs" />
-    <Compile Include="Business\CQRS\ICommand.cs" />
-    <Compile Include="Business\CQRS\ICommandHandler.cs" />
-    <Compile Include="Business\CQRS\UpdateMovieCommand.cs" />
+    <Compile Include="Business\CQRS\Command\CommandHandler.cs" />
+    <Compile Include="Business\CQRS\Command\CreateMovieCommand.cs" />
+    <Compile Include="Business\CQRS\Command\ICommandHandler.cs" />
+    <Compile Include="Business\CQRS\Query\IMovieQueryHandler.cs" />
+    <Compile Include="Business\CQRS\Query\MovieQueryHandler.cs" />
+    <Compile Include="Business\CQRS\Command\UpdateMovieCommand.cs" />
     <Compile Include="Business\Helpers\ExtensionMethods.cs" />
     <Compile Include="Business\Repository\IReadRepository.cs" />
     <Compile Include="Business\Repository\IWriteRepository.cs" />
@@ -115,13 +116,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\IMovieCommandHandler.cs" />
-    <Compile Include="Models\IMovieQueryHandler.cs" />
-    <Compile Include="Models\IMoviesStore.cs" />
-    <Compile Include="Models\IMovieStore.cs" />
     <Compile Include="Models\Movie.cs" />
-    <Compile Include="Models\MovieStore.cs" />
-    <Compile Include="Business\Enum\SortedByEnum.cs" />
+    <Compile Include="Business\Enum\SortByEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MoviesService.Business.CQRS
+﻿namespace MoviesService.Business.CQRS.Command
 {
     /// <summary>
     /// The interface of CommandHandler class for moqing purposes
@@ -18,7 +12,7 @@ namespace MoviesService.Business.CQRS
         void Handle(CreateMovieCommand command);
 
         /// <summary>
-        /// Handles update moview command
+        /// Handles update movie command
         /// </summary>
         /// <param name="command">command object which contains the movie to update</param>
         void Handle(UpdateMovieCommand command);

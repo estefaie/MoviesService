@@ -30,9 +30,9 @@ namespace MoviesService.Business.Repository
         /// <summary>
         /// Retrieves the list of movies sorted by a particular property
         /// </summary>
-        /// <param name="sortedBy">the property to sort the list by</param>
-        /// <returns></returns>
-        IEnumerable<Movie> GetMoviesSortedBy(SortedByEnum sortedBy);
+        /// <param name="sortBy">the property to sort the list by</param>
+        /// <returns>Sorted list of movies</returns>
+        IEnumerable<Movie> GetMoviesSortedBy(SortByEnum sortBy);
 
         /// <summary>
         /// Inserts a movie object into MovieLibrary Db

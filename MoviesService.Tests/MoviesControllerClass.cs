@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MoviesService.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class MoviesControllerClass
     {
         [TestMethod]
         public void TestMethod1()

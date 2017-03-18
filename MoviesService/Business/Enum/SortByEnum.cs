@@ -3,7 +3,7 @@
     /// <summary>
     /// Enumerator which contains properties of Movie for sorting 
     /// </summary>
-    public enum SortedByEnum
+    public enum SortByEnum
     {
         Classification,
         Genre,
