@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MoviesLibrary;
-using MoviesService.Business.Enum;
+using MoviesService.Business.Enums;
 using MoviesService.Models;
 
 namespace MoviesService.Business.Repository
@@ -12,7 +8,7 @@ namespace MoviesService.Business.Repository
     /// <summary>
     /// The interface for ReadRepository class for mocking purposes
     /// </summary>
-    public interface IReadRepository
+    public interface IReadRepository : IDisposable
     {
         /// <summary>
         /// Retrieves the list of movies
@@ -25,7 +21,7 @@ namespace MoviesService.Business.Repository
         /// </summary>
         /// <param name="textToSearch">the text to search for</param>
         /// <returns>the list of movies</returns>
-        IEnumerable<Movie> SearchMovies(string textToSearch);
+        IEnumerable<Movie> GetMoviesSearchFor(string textToSearch);
 
         /// <summary>
         /// Retrieves the list of movies sorted by a particular property

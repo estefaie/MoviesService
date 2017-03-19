@@ -1,6 +1,7 @@
-﻿using MoviesService.Business.Repository;
+using MoviesService.Business.Repository;
+using MoviesService.Models;
 
-namespace MoviesService.Business.CQRS.Command
+namespace MoviesService.Business.CQRS
 {
     /// <summary>
     /// Handles all of the commands 
@@ -10,7 +11,7 @@ namespace MoviesService.Business.CQRS.Command
         /// <summary>
         /// the instance of IWriteRepository for doing the write to db operations
         /// </summary>
-        private readonly IWriteRepository _wtireRepository;
+        private readonly IWriteRepository _writeRepository;
 
         /// <summary>
         /// the instance of IReadRepository for sending the changes to read repo to do the
@@ -25,28 +26,33 @@ namespace MoviesService.Business.CQRS.Command
         /// <param name="readRepository">IReadRepository instance to be injected by DI framework</param>
         public CommandHandler(IWriteRepository writeRepository, IReadRepository readRepository)
         {
-            _wtireRepository = writeRepository;
+            _writeRepository = writeRepository;
             _readRepository = readRepository;
         }
 
         /// <summary>
         /// Handles create movie command
         /// </summary>
-        /// <param name="command">command object which contains the movie to create</param>
-        public void Handle(CreateMovieCommand command)
+        /// <param name="movie">movie to be created</param>
+        public void HandleCreateMovieCommand(Movie movie)
         {
-            _wtireRepository.InsertMovie(command.Movie);
-            _readRepository.InsertMovie(command.Movie);
+            _writeRepository.InsertMovie(movie);
+            _readRepository.InsertMovie(movie);
         }
 
         /// <summary>
         /// Handles update movie command
         /// </summary>
-        /// <param name="command">command object which contains the movie to update</param>
-        public void Handle(UpdateMovieCommand command)
+        /// <param name="movie">movie to be updated</param>
+        public void HandleUpdateMovieCommand(Movie movie)
         {
-            _wtireRepository.UpdateMovie(command.Movie);
-            _readRepository.UpdateMovie(command.Movie);
+            _writeRepository.UpdateMovie(movie);
+            _readRepository.UpdateMovie(movie);
+        }
+
+        public void Dispose()
+        {
+            _readRepository?.Dispose();
         }
     }
 }

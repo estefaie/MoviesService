@@ -1,4 +1,4 @@
-﻿namespace MoviesService.Business.Enum
+﻿namespace MoviesService.Business.Enums
 {
     /// <summary>
     /// Enumerator which contains properties of Movie for sorting 

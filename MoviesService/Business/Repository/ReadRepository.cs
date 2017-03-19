@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using MoviesLibrary;
-using MoviesService.Business.Enum;
+using MoviesService.Business.Enums;
 using MoviesService.Business.Helpers;
 using MoviesService.Models;
 
@@ -41,7 +42,7 @@ namespace MoviesService.Business.Repository
         /// this dictionary is being done internally by the object itself, it doesn't have a 
         /// set property.
         /// </summary>
-        public ConcurrentDictionary<SortByEnum, SortedList<object, Movie>> OrderByDictionary { get; }
+        public ConcurrentDictionary<SortByEnum, List<Movie>> OrderByDictionary { get; }
 
         /// <summary>
         /// A dictionary of Db generated MovieId to Movie for updating.
@@ -63,7 +64,7 @@ namespace MoviesService.Business.Repository
             var dataSource = new MovieDataSource();
             Movies = new ConcurrentBag<Movie>();
             SearchMoviesDictionary = new ConcurrentDictionary<string, List<Movie>>();
-            OrderByDictionary = new ConcurrentDictionary<SortByEnum, SortedList<object, Movie>>();
+            OrderByDictionary = new ConcurrentDictionary<SortByEnum, List<Movie>>();
             MovieIdToMovieDictionary = new ConcurrentDictionary<int, Movie>();
             TempMovieIdToMovieDictionary = new ConcurrentDictionary<Guid, Movie>();
 
@@ -84,10 +85,10 @@ namespace MoviesService.Business.Repository
         private void AddMovieToSearchDictionary(Movie movie)
         {
             var listOfWords = new List<string>();
-            listOfWords.AddRange(movie.Cast);
-            listOfWords.Add(movie.Classification);
-            listOfWords.Add(movie.Genre);
-            listOfWords.Add(movie.Title);
+            listOfWords.AddRange(movie.Cast.Select(c=>c.ToLower()));
+            listOfWords.AddRange(movie.Genre.Split(' ').Select(c=>c.ToLower()));
+            listOfWords.AddRange(movie.Genre.Split(' ').Select(g => g.ToLower()));
+            listOfWords.AddRange(movie.Title.Split(' ').Select(g => g.ToLower()));
             listOfWords.Add(movie.MovieId.ToString());
             listOfWords.Add(movie.Rating.ToString());
             listOfWords.Add(movie.ReleaseDate.ToString());
@@ -107,12 +108,12 @@ namespace MoviesService.Business.Repository
         /// </summary>
         private void CreateInitialOrderByDictinary()
         {
-            OrderByDictionary.TryAdd(SortByEnum.ReleaseDate, new SortedList<object, Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Classification, new SortedList<object, Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Genre, new SortedList<object, Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.MovieId, new SortedList<object, Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Rating, new SortedList<object, Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Title, new SortedList<object, Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.ReleaseDate, new List<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Classification, new List<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Genre, new List<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.MovieId, new List<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Rating, new List<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Title, new List<Movie>());
         }
 
         /// <summary>
@@ -121,13 +122,27 @@ namespace MoviesService.Business.Repository
         /// <param name="movie"></param>
         private void AddMovieToOrderedLists(Movie movie)
         {
-            //Prefered to do this hardcoded rather than using a foreach for more performance.
-            OrderByDictionary[SortByEnum.Classification].Add(movie.Classification, movie);
-            OrderByDictionary[SortByEnum.Title].Add(movie.Title, movie);
-            OrderByDictionary[SortByEnum.Genre].Add(movie.Genre, movie);
-            OrderByDictionary[SortByEnum.MovieId].Add(movie.MovieId, movie);
-            OrderByDictionary[SortByEnum.Rating].Add(movie.Rating, movie);
-            OrderByDictionary[SortByEnum.Rating].Add(movie.ReleaseDate, movie);
+            //Prefered to do this hardcoded rather than using a foreach for y performance.
+            //First I tried SortedList, but it doesn't support duplicate keys and I didn't 
+            //get enough time to implement a better way :(
+            var orderedByClassification = OrderByDictionary[SortByEnum.Classification];
+            orderedByClassification.Add(movie);
+            OrderByDictionary[SortByEnum.Classification] = orderedByClassification.OrderBy(m => m.Classification).ToList();
+            var orderedByTitle = OrderByDictionary[SortByEnum.Title];
+            orderedByTitle.Add(movie);
+            OrderByDictionary[SortByEnum.Title] = orderedByTitle.OrderBy(m => m.Title).ToList();
+            var orderedByGenre = OrderByDictionary[SortByEnum.Genre];
+            orderedByGenre.Add(movie);
+            OrderByDictionary[SortByEnum.Genre] = orderedByGenre.OrderBy(m => m.Genre).ToList();
+            var orderedByMovieId = OrderByDictionary[SortByEnum.MovieId];
+            orderedByMovieId.Add(movie);
+            OrderByDictionary[SortByEnum.MovieId] = orderedByMovieId.OrderBy(m => m.MovieId).ToList();
+            var orderedByRating = OrderByDictionary[SortByEnum.Rating];
+            orderedByRating.Add(movie);
+            OrderByDictionary[SortByEnum.Rating] = orderedByRating.OrderBy(m => m.Rating).ToList();
+            var orderedByReleaseDate = OrderByDictionary[SortByEnum.ReleaseDate];
+            orderedByReleaseDate.Add(movie);
+            OrderByDictionary[SortByEnum.ReleaseDate] = orderedByReleaseDate.OrderBy(m => m.ReleaseDate).ToList();
         }
 
         /// <summary>
@@ -144,7 +159,7 @@ namespace MoviesService.Business.Repository
         /// </summary>
         /// <param name="textToSearch">the text to search for</param>
         /// <returns>the list of movies</returns>
-        public IEnumerable<Movie> SearchMovies(string textToSearch)
+        public IEnumerable<Movie> GetMoviesSearchFor(string textToSearch)
         {
             List<Movie> movies;
             SearchMoviesDictionary.TryGetValue(textToSearch, out movies);
@@ -158,9 +173,9 @@ namespace MoviesService.Business.Repository
         /// <returns>sorted list of movies</returns>
         public IEnumerable<Movie> GetMoviesSortedBy(SortByEnum sortBy)
         {
-            SortedList<object, Movie> movies;
+            List<Movie> movies;
             OrderByDictionary.TryGetValue(sortBy, out movies);
-            return movies.Values;
+            return movies;
         }
 
         /// <summary>
@@ -191,6 +206,10 @@ namespace MoviesService.Business.Repository
             //the trickiest part. For update, we need to whaich field(s) has been updated and
             //update sorted and search dictionaries for them.
 
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

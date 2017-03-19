@@ -101,23 +101,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Business\CQRS\Command\CommandHandler.cs" />
-    <Compile Include="Business\CQRS\Command\CreateMovieCommand.cs" />
-    <Compile Include="Business\CQRS\Command\ICommandHandler.cs" />
-    <Compile Include="Business\CQRS\Query\IMovieQueryHandler.cs" />
-    <Compile Include="Business\CQRS\Query\MovieQueryHandler.cs" />
-    <Compile Include="Business\CQRS\Command\UpdateMovieCommand.cs" />
+    <Compile Include="Business\CQRS\CommandHandler.cs" />
+    <Compile Include="Business\CQRS\ICommandHandler.cs" />
+    <Compile Include="Business\CQRS\IQueryHandler.cs" />
+    <Compile Include="Business\CQRS\QueryHandler.cs" />
     <Compile Include="Business\Helpers\ExtensionMethods.cs" />
     <Compile Include="Business\Repository\IReadRepository.cs" />
     <Compile Include="Business\Repository\IWriteRepository.cs" />
     <Compile Include="Business\Repository\ReadRepository.cs" />
     <Compile Include="Business\Repository\WriteRepository.cs" />
-    <Compile Include="Controllers\MoviesController.cs" />
+    <Compile Include="Controllers\MovieController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Movie.cs" />
-    <Compile Include="Business\Enum\SortByEnum.cs" />
+    <Compile Include="Business\Enums\SortByEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
