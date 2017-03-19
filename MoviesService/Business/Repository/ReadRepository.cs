@@ -2,9 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using MoviesLibrary;
 using MoviesService.Business.Enums;
-using MoviesService.Business.Helpers;
 using MoviesService.Models;
 
 namespace MoviesService.Business.Repository
