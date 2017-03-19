@@ -73,6 +73,7 @@
     <Compile Include="MoviesControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryHandlerTest.cs" />
+    <Compile Include="ReadRepositoryTest.cs" />
     <Compile Include="WriteRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
