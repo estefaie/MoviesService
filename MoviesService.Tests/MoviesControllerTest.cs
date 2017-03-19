@@ -51,8 +51,8 @@ namespace MoviesService.Tests
             var result = mc.GetMovies();
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), _movies.Count);
-            Assert.AreEqual(result.First().MovieId, _movies.First().MovieId);
+            Assert.AreEqual(_movies.Count, result.Count());
+            Assert.AreEqual(_movies.First().MovieId, result.First().MovieId);
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace MoviesService.Tests
             var result = mc.GetMoviesSorted("");
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), 0);
+            Assert.AreEqual(0, result.Count());
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace MoviesService.Tests
             var result = mc.GetMoviesSorted(null);
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), 0);
+            Assert.AreEqual(0, result.Count());
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace MoviesService.Tests
             var result = mc.GetMoviesSorted("unrelated");
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), 0);
+            Assert.AreEqual(0, result.Count());
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace MoviesService.Tests
             var result = mc.GetMoviesSearched("");
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), 0);
+            Assert.AreEqual(0, result.Count());
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@ namespace MoviesService.Tests
             var result = mc.GetMoviesSearched(null);
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), 0);
+            Assert.AreEqual(0, result.Count());
         }
 
         //[TestMethod]

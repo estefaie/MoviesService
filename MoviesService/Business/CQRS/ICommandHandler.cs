@@ -12,12 +12,12 @@ namespace MoviesService.Business.CQRS
         /// Handles create movie command
         /// </summary>
         /// <param name="movie">movie to be created</param>
-        void HandleCreateMovieCommand(Movie movie);
+        void ExecuteCreateMovieCommand(Movie movie);
 
         /// <summary>
         /// Handles update movie command
         /// </summary>
         /// <param name="movie">movie to be updated</param>
-        void HandleUpdateMovieCommand(Movie movie);
+        void ExecuteHandleUpdateMovieCommand(Movie movie);
     }
 }

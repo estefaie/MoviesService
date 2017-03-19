@@ -35,14 +35,14 @@ namespace MoviesService.Business.Repository
         /// dictionary is being done internally by the object itself, it doesn't have a set 
         /// property.
         /// </summary>
-        public ConcurrentDictionary<string, List<Movie>> SearchMoviesDictionary { get; }
+        public ConcurrentDictionary<string, ConcurrentBag<Movie>> SearchMoviesDictionary { get; }
 
         /// <summary>
         /// A dictionary of each sortedBy item and its sorted list. Beacause the maintenance of 
         /// this dictionary is being done internally by the object itself, it doesn't have a 
         /// set property.
         /// </summary>
-        public ConcurrentDictionary<SortByEnum, List<Movie>> OrderByDictionary { get; }
+        public ConcurrentDictionary<SortByEnum, ConcurrentBag<Movie>> OrderByDictionary { get; }
 
         /// <summary>
         /// A dictionary of Db generated MovieId to Movie for updating.
@@ -56,22 +56,24 @@ namespace MoviesService.Business.Repository
         /// </summary>
         public ConcurrentDictionary<Guid, Movie> TempMovieIdToMovieDictionary { get; }
 
+        private readonly IDb _db;
+
         /// <summary>
         /// Constructor the in memory fields are being initiated here
         /// </summary>
-        public ReadRepository()
+        public ReadRepository(IDb db)
         {
-            var dataSource = new MovieDataSource();
+            _db = db;
             Movies = new ConcurrentBag<Movie>();
-            SearchMoviesDictionary = new ConcurrentDictionary<string, List<Movie>>();
-            OrderByDictionary = new ConcurrentDictionary<SortByEnum, List<Movie>>();
+            SearchMoviesDictionary = new ConcurrentDictionary<string, ConcurrentBag<Movie>>();
+            OrderByDictionary = new ConcurrentDictionary<SortByEnum, ConcurrentBag<Movie>>();
             MovieIdToMovieDictionary = new ConcurrentDictionary<int, Movie>();
             TempMovieIdToMovieDictionary = new ConcurrentDictionary<Guid, Movie>();
 
             CreateInitialOrderByDictinary();
-            var movies = dataSource.GetAllData();
-            foreach (var movieData in movies)
-                InsertMovie(movieData.ToMovie());
+            var movies = _db.GetAllData();
+            foreach (var m in movies)
+                InsertMovie(m);
         }
 
 
@@ -95,11 +97,11 @@ namespace MoviesService.Business.Repository
 
             foreach (var word in listOfWords)
             {
-                List<Movie> list;
+                ConcurrentBag<Movie> list;
                 if (SearchMoviesDictionary.TryGetValue(word, out list))
                     list.Add(movie);
                 else
-                    SearchMoviesDictionary.TryAdd(word, new List<Movie> {movie});
+                    SearchMoviesDictionary.TryAdd(word, new ConcurrentBag<Movie> {movie});
             }
         }
 
@@ -108,12 +110,12 @@ namespace MoviesService.Business.Repository
         /// </summary>
         private void CreateInitialOrderByDictinary()
         {
-            OrderByDictionary.TryAdd(SortByEnum.ReleaseDate, new List<Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Classification, new List<Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Genre, new List<Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.MovieId, new List<Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Rating, new List<Movie>());
-            OrderByDictionary.TryAdd(SortByEnum.Title, new List<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.ReleaseDate, new ConcurrentBag<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Classification, new ConcurrentBag<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Genre, new ConcurrentBag<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.MovieId, new ConcurrentBag<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Rating, new ConcurrentBag<Movie>());
+            OrderByDictionary.TryAdd(SortByEnum.Title, new ConcurrentBag<Movie>());
         }
 
         /// <summary>
@@ -127,22 +129,28 @@ namespace MoviesService.Business.Repository
             //get enough time to implement a better way :(
             var orderedByClassification = OrderByDictionary[SortByEnum.Classification];
             orderedByClassification.Add(movie);
-            OrderByDictionary[SortByEnum.Classification] = orderedByClassification.OrderBy(m => m.Classification).ToList();
+            OrderByDictionary[SortByEnum.Classification] = 
+                new ConcurrentBag<Movie>(orderedByClassification.OrderBy(m => m.Classification));
             var orderedByTitle = OrderByDictionary[SortByEnum.Title];
             orderedByTitle.Add(movie);
-            OrderByDictionary[SortByEnum.Title] = orderedByTitle.OrderBy(m => m.Title).ToList();
+            OrderByDictionary[SortByEnum.Title] = 
+                new ConcurrentBag<Movie>(orderedByTitle.OrderBy(m => m.Title));
             var orderedByGenre = OrderByDictionary[SortByEnum.Genre];
             orderedByGenre.Add(movie);
-            OrderByDictionary[SortByEnum.Genre] = orderedByGenre.OrderBy(m => m.Genre).ToList();
+            OrderByDictionary[SortByEnum.Genre] = 
+                new ConcurrentBag<Movie>(orderedByGenre.OrderBy(m => m.Genre));
             var orderedByMovieId = OrderByDictionary[SortByEnum.MovieId];
             orderedByMovieId.Add(movie);
-            OrderByDictionary[SortByEnum.MovieId] = orderedByMovieId.OrderBy(m => m.MovieId).ToList();
+            OrderByDictionary[SortByEnum.MovieId] = 
+                new ConcurrentBag<Movie>(orderedByMovieId.OrderBy(m => m.MovieId));
             var orderedByRating = OrderByDictionary[SortByEnum.Rating];
             orderedByRating.Add(movie);
-            OrderByDictionary[SortByEnum.Rating] = orderedByRating.OrderBy(m => m.Rating).ToList();
+            OrderByDictionary[SortByEnum.Rating] = 
+                new ConcurrentBag<Movie>(orderedByRating.OrderBy(m => m.Rating));
             var orderedByReleaseDate = OrderByDictionary[SortByEnum.ReleaseDate];
             orderedByReleaseDate.Add(movie);
-            OrderByDictionary[SortByEnum.ReleaseDate] = orderedByReleaseDate.OrderBy(m => m.ReleaseDate).ToList();
+            OrderByDictionary[SortByEnum.ReleaseDate] = 
+                new ConcurrentBag<Movie>(orderedByReleaseDate.OrderBy(m => m.ReleaseDate));
         }
 
         /// <summary>
@@ -161,7 +169,7 @@ namespace MoviesService.Business.Repository
         /// <returns>the list of movies</returns>
         public IEnumerable<Movie> GetMoviesSearchFor(string textToSearch)
         {
-            List<Movie> movies;
+            ConcurrentBag<Movie> movies;
             SearchMoviesDictionary.TryGetValue(textToSearch, out movies);
             return movies;
         }
@@ -173,7 +181,7 @@ namespace MoviesService.Business.Repository
         /// <returns>sorted list of movies</returns>
         public IEnumerable<Movie> GetMoviesSortedBy(SortByEnum sortBy)
         {
-            List<Movie> movies;
+            ConcurrentBag<Movie> movies;
             OrderByDictionary.TryGetValue(sortBy, out movies);
             return movies;
         }

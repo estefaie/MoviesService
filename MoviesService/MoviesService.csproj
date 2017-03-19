@@ -106,6 +106,8 @@
     <Compile Include="Business\CQRS\IQueryHandler.cs" />
     <Compile Include="Business\CQRS\QueryHandler.cs" />
     <Compile Include="Business\Helpers\ExtensionMethods.cs" />
+    <Compile Include="Business\Repository\Db.cs" />
+    <Compile Include="Business\Repository\IDb.cs" />
     <Compile Include="Business\Repository\IReadRepository.cs" />
     <Compile Include="Business\Repository\IWriteRepository.cs" />
     <Compile Include="Business\Repository\ReadRepository.cs" />

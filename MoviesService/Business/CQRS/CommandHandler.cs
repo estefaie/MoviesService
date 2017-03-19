@@ -31,20 +31,20 @@ namespace MoviesService.Business.CQRS
         }
 
         /// <summary>
-        /// Handles create movie command
+        /// Executes create movie command
         /// </summary>
         /// <param name="movie">movie to be created</param>
-        public void HandleCreateMovieCommand(Movie movie)
+        public void ExecuteCreateMovieCommand(Movie movie)
         {
             _writeRepository.InsertMovie(movie);
             _readRepository.InsertMovie(movie);
         }
 
         /// <summary>
-        /// Handles update movie command
+        /// Executes update movie command
         /// </summary>
         /// <param name="movie">movie to be updated</param>
-        public void HandleUpdateMovieCommand(Movie movie)
+        public void ExecuteHandleUpdateMovieCommand(Movie movie)
         {
             _writeRepository.UpdateMovie(movie);
             _readRepository.UpdateMovie(movie);

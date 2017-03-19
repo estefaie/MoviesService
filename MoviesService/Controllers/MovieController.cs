@@ -64,8 +64,8 @@ namespace MoviesService.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            _commandHandler.HandleUpdateMovieCommand(movie);
+                
+            _commandHandler.ExecuteHandleUpdateMovieCommand(movie);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -79,7 +79,7 @@ namespace MoviesService.Controllers
                 return BadRequest(ModelState);
             }
 
-            _commandHandler.HandleCreateMovieCommand(movie);
+            _commandHandler.ExecuteCreateMovieCommand(movie);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
